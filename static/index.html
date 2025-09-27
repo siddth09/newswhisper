@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NewsWhisper 🎙️</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        #results div { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h1>🎙️ NewsWhisper</h1>
+    <p>Click Start, speak a short search phrase, then click Search if needed.</p>
+
+    <button id="startBtn">Start</button>
+    <button id="stopBtn">Stop</button>
+    <button id="searchBtn">Search</button>
+    <input type="text" id="queryInput" style="width:300px;" placeholder="Type or speak your query">
+    <div id="results"></div>
+
+    <script>
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onresult = function(event) {
+            document.getElementById('queryInput').value = event.results[0][0].transcript;
+        };
+    }
+
+    document.getElementById('startBtn').onclick = () => recognition && recognition.start();
+    document.getElementById('stopBtn').onclick = () => recognition && recognition.stop();
+    document.getElementById('searchBtn').onclick = () => doSearch(document.getElementById('queryInput').value);
+
+    async function doSearch(text) {
+        const res = await fetch(`/search?query=${encodeURIComponent(text)}`);
+        const data = await res.json();
+        const container = document.getElementById("results");
+        container.innerHTML = "";
+
+        if (data.results && data.results.length > 0) {
+            data.results.forEach(r => {
+                const item = document.createElement("div");
+                item.innerHTML = `<h3><a href="${r.link}" target="_blank">${r.title}</a></h3>
+                                  <p>${r.snippet}</p>
+                                  <small>${r.published}</small>`;
+                container.appendChild(item);
+            });
+        } else {
+            container.innerHTML = "<p>No results found.</p>";
+        }
+    }
+    </script>
+</body>
+</html>

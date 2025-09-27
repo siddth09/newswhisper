@@ -1,0 +1,8 @@
+# Add files/folders you don't want uploaded to Cloud Build
+.gcloudignore
+.git
+.git/*
+__pycache__
+*.pyc
+venv/
+.env
