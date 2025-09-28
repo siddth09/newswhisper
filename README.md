@@ -80,11 +80,10 @@ gcloud run deploy newswhisper --image gcr.io/PROJECT_ID/newswhisper --platform m
 ## Notes
 
 * Replace `PROJECT_ID` and `REGION` with your GCP project values.
-* Replace `YOUR_VIDEO_ID` with your actual YouTube video ID.
 * This project uses only free/open-source tools.
 
 ---
 
 ## License
 
-MIT License
+MIT License 2025 Siddharth
